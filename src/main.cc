@@ -1,6 +1,7 @@
 #include<iostream>
 #include<vector>
 #include<fstream>
+#include <filesystem>
 #include<Eigen/Dense>
 
 #include "vector_field.hh"
@@ -14,6 +15,7 @@
 #include "scalar_boundary_field.hh"
 #include "vector_boundary_field.hh"
 #include "pv_coupling.hh"
+#include "paths.hh"
 
 int main (void)
 {   
@@ -31,6 +33,10 @@ int main (void)
  
  // Declaration and initialization
   double delta_time = 0.0001, nu_val = 0.001, alpha_u = 0.7, initial_pressure = 0.0, alpha_initial = 0.0, initial_rho = 0.0, initial_mu = 0.0;
+  
+  double end_time = 1.0;
+  int number_of_time_steps = static_cast<int>(end_time/delta_time + 0.5);
+
   double rho_1 = 1000.0, rho_2 = 1.0, nu_1 = 0.000001, nu_2 = 0.0000148;
 
   double mu_1 = nu_1*rho_1;
@@ -46,7 +52,13 @@ int main (void)
   std::vector<double> pressure_corrections_for_velocity_y(total_cells);
   std::vector<double> cell_fluxes_sum;
 
-  std::ofstream div_u("div_u_cell.txt");
+  //std::ofstream div_u("div_u_cell.txt");
+  std::filesystem::create_directories(paths::fields);
+  std::filesystem::create_directories(paths::residuals);
+  std::filesystem::create_directories(paths::coefficients);
+
+  std::ofstream div_u(paths::residuals + "div_u_cell.txt");
+
 
   std::vector<double> x_distance (columns);
   std::vector<double> y_distance (rows);
@@ -58,7 +70,8 @@ int main (void)
   PV_coupling cavity(total_cells, nu_val, initial_pressure, alpha_initial, initial_rho, initial_mu, const_velocity); 
 
   //Mesh generation and calculation of mesh parameters
-  Mesh m("../points.txt","../faces.txt","../cells.txt","../boundary.txt");
+  //Mesh m("../points.txt","../faces.txt","../cells.txt","../boundary.txt");
+  Mesh m(paths::mesh + "points.txt", paths::mesh + "faces.txt", paths::mesh + "cells.txt", paths::mesh + "boundary.txt");
 
   std::vector<Cell> list_of_cells = m.return_list_of_all_cells();
   std::vector<Face> list_of_faces = m.return_list_of_all_faces();
@@ -90,32 +103,34 @@ int main (void)
   Vector_boundary_field velocity_boundary(list_of_boundaries, boundary_types_vector, boundary_values_vector);
 
   //File object declarations for Residual and Convergence monitoring
-  std::ofstream sum_initial_residual_ux("sum_residual_initial_ux.txt");
-  std::ofstream sum_initial_residual_uy("sum_residual_initial_uy.txt");
 
-  std::ofstream sum_final_residual_ux("sum_residual_final_ux.txt");
-  std::ofstream sum_final_residual_uy("sum_residual_final_uy.txt");
+  std::ofstream sum_initial_residual_ux(paths::residuals + "sum_residual_initial_ux.txt");
+  std::ofstream sum_initial_residual_uy(paths::residuals + "sum_residual_initial_uy.txt");
 
-  std::ofstream sum_initial_pressure_residual("sum_initial_pressure_residual.txt");
-  std::ofstream sum_final_pressure_residual("sum_final_pressure_residual.txt");
+  std::ofstream sum_final_residual_ux(paths::residuals + "sum_residual_final_ux.txt");
+  std::ofstream sum_final_residual_uy(paths::residuals + "sum_residual_final_uy.txt");
 
-  std::ofstream pressure_convergence_initial_h("pressure_convergence.txt");
-  std::ofstream x_velocity_convergence_initial("x_velocity_convergence.txt");
-  std::ofstream y_velocity_convergence_initial("y_velocity_convergence.txt");
-  std::ofstream x_velocity_convergence_final("x_velocity_convergence_final.txt");
-  std::ofstream y_velocity_convergence_final("y_velocity_convergence_final.txt");
+  std::ofstream sum_initial_pressure_residual(paths::residuals + "sum_initial_pressure_residual.txt");
+  std::ofstream sum_final_pressure_residual(paths::residuals + "sum_final_pressure_residual.txt");
 
-  std::ofstream file_courant_minmax("courant_minmax.txt");
-  std::ofstream file_courant_x_minmax("courant_x_minmax.txt");
-  std::ofstream file_courant_y_minmax("courant_y_minmax.txt");
+  std::ofstream pressure_convergence_initial_h(paths::residuals + "pressure_convergence.txt");
+  std::ofstream x_velocity_convergence_initial(paths::residuals + "x_velocity_convergence.txt");
+  std::ofstream y_velocity_convergence_initial(paths::residuals + "y_velocity_convergence.txt");
+  std::ofstream x_velocity_convergence_final(paths::residuals + "x_velocity_convergence_final.txt");
+  std::ofstream y_velocity_convergence_final(paths::residuals + "y_velocity_convergence_final.txt");
+
+  std::ofstream file_courant_minmax(paths::residuals + "courant_minmax.txt");
+  std::ofstream file_courant_x_minmax(paths::residuals + "courant_x_minmax.txt");
+  std::ofstream file_courant_y_minmax(paths::residuals + "courant_y_minmax.txt");
 
   int iteration_no = 0;
 
   // Initialization of Phase-Fraction Fields
   cavity.set_alpha_scalar_initial_fields(list_of_cells, rho_1, rho_2, nu_1, nu_2, mu_1, mu_2, x_w_max, y_w_max);
 
-   while(iteration_no <50000000)
-   {
+   //while(iteration_no <50000000)
+  while(iteration_no < number_of_time_steps)
+  {
      std::cout<<"Iteration Number : "<<iteration_no<<std::endl;
      iteration_no = iteration_no +1; 
 

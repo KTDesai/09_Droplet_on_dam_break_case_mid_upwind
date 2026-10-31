@@ -1,4 +1,6 @@
 #include "pv_coupling.hh"
+#include "paths.hh"
+
 #include<iostream>
 #include<fstream>
 #include <vector>
@@ -461,8 +463,8 @@ void PV_coupling::velocity_calculate_initial_residuals(std::vector<double> &x_di
 { 
    if((iteration_number % output_interval) == 0)
   { 
-   std::ofstream file_initial_residuals_ux("initial_residuals_ux.txt");
-   std::ofstream file_initial_residuals_uy("initial_residuals_uy.txt");
+   std::ofstream file_initial_residuals_ux(paths::residuals + "initial_residuals_ux.txt");
+   std::ofstream file_initial_residuals_uy(paths::residuals + "initial_residuals_uy.txt");
 
    velocity_initial_residuals_ux = velocity_b_vector_combined_ux - velocity_a_matrix_combined * velocity.vector_field_values_x;
    velocity_initial_residuals_uy = velocity_b_vector_combined_uy - velocity_a_matrix_combined * velocity.vector_field_values_y;
@@ -536,8 +538,8 @@ void PV_coupling::velocity_calculate_final_residuals(std::vector<double> &x_dist
 {
    if((iteration_number % output_interval) ==0)
  {  
-   std::ofstream file_final_residuals_ux("final_residuals_ux.txt");
-   std::ofstream file_final_residuals_uy("final_residuals_uy.txt");
+   std::ofstream file_final_residuals_ux(paths::residuals + "final_residuals_ux.txt");
+   std::ofstream file_final_residuals_uy(paths::residuals + "final_residuals_uy.txt");
    
    velocity_final_residuals_ux = velocity_b_vector_combined_ux - velocity_a_matrix_combined * velocity.vector_field_values_x;
    velocity_final_residuals_uy = velocity_b_vector_combined_uy - velocity_a_matrix_combined * velocity.vector_field_values_y;
@@ -710,20 +712,20 @@ void PV_coupling::velocity_compute_div_u(std::vector<Cell> &list_of_cells, int &
 //Output Matrix coefficients of discretized momentum predictor
 void PV_coupling::velocity_output_vector_matrix_coefficients_to_file(double total_cells)
 {
-     std::ofstream convection_coeffs_a("vel_convection_coeffs_a.txt");
-     std::ofstream convection_coeffs_b_x("vel_convection_coeffs_b_x.txt");
-     std::ofstream convection_coeffs_b_y("vel_convection_coeffs_b_y.txt");
-     std::ofstream diffusion_coeffs_a("vel_diffusion_coeffs_a.txt");
-     std::ofstream diffusion_coeffs_b_x("vel_diffusion_coeffs_b_x.txt");
-     std::ofstream diffusion_coeffs_b_y("vel_diffusion_coeffs_b_y.txt");
-     std::ofstream roc_coeffs_a("vel_roc_coeffs_a.txt");
-     std::ofstream roc_coeffs_b_x("vel_roc_coeffs_b_x.txt");
-     std::ofstream roc_coeffs_b_y("vel_roc_coeffs_b_y.txt");
-     std::ofstream source_coeffs_b_x("vel_source_coeffs_b_x.txt");
-     std::ofstream source_coeffs_b_y("vel_source_coeffs_b_y.txt");
-     std::ofstream combined_coeffs_a("vel_combined_coeffs_a.txt");
-     std::ofstream combined_coeffs_b_x("vel_combined_coeffs_b_x.txt");
-     std::ofstream combined_coeffs_b_y("vel_combined_coeffs_b_y.txt");
+     std::ofstream convection_coeffs_a(paths::coefficients + "vel_convection_coeffs_a.txt");
+     std::ofstream convection_coeffs_b_x(paths::coefficients + "vel_convection_coeffs_b_x.txt");
+     std::ofstream convection_coeffs_b_y(paths::coefficients + "vel_convection_coeffs_b_y.txt");
+     std::ofstream diffusion_coeffs_a(paths::coefficients + "vel_diffusion_coeffs_a.txt");
+     std::ofstream diffusion_coeffs_b_x(paths::coefficients + "vel_diffusion_coeffs_b_x.txt");
+     std::ofstream diffusion_coeffs_b_y(paths::coefficients + "vel_diffusion_coeffs_b_y.txt");
+     std::ofstream roc_coeffs_a(paths::coefficients + "vel_roc_coeffs_a.txt");
+     std::ofstream roc_coeffs_b_x(paths::coefficients + "vel_roc_coeffs_b_x.txt");
+     std::ofstream roc_coeffs_b_y(paths::coefficients + "vel_roc_coeffs_b_y.txt");
+     std::ofstream source_coeffs_b_x(paths::coefficients + "vel_source_coeffs_b_x.txt");
+     std::ofstream source_coeffs_b_y(paths::coefficients + "vel_source_coeffs_b_y.txt");
+     std::ofstream combined_coeffs_a(paths::coefficients + "vel_combined_coeffs_a.txt");
+     std::ofstream combined_coeffs_b_x(paths::coefficients + "vel_combined_coeffs_b_x.txt");
+     std::ofstream combined_coeffs_b_y(paths::coefficients + "vel_combined_coeffs_b_y.txt");
     
      for(int i = 0; i<total_cells; i++)
      {
@@ -1091,7 +1093,7 @@ void PV_coupling::pressure_calculate_initial_residuals_p(std::vector<double> &x_
 {
      if((iteration_number % output_interval) == 0)
   { 
-   std::ofstream file_initial_residuals_p("pressure_initial_residuals.txt");
+   std::ofstream file_initial_residuals_p(paths::residuals + "pressure_initial_residuals.txt");
 
    pressure_initial_residuals_p = pressure_b_vector_combined - pressure_a_matrix_combined * pressure.scalar_field_values;
    
@@ -1165,7 +1167,7 @@ void PV_coupling::pressure_calculate_final_residuals_p(std::vector<double> &x_di
 {
   if((iteration_number % output_interval) == 0)
   { 
-   std::ofstream file_final_residuals_p("pressure_final_residuals.txt");
+   std::ofstream file_final_residuals_p(paths::residuals + "pressure_final_residuals.txt");
 
    pressure_final_residuals_p = pressure_b_vector_combined - pressure_a_matrix_combined * pressure.scalar_field_values;
    
@@ -1253,15 +1255,15 @@ void PV_coupling::pressure_compute_flux_correction(std::vector<Cell> &list_of_ce
 
 void PV_coupling::pressure_output_scalar_matrix_coefficients_to_file(double total_cells)
 {
-     std::ofstream pressure_convection_coeffs_a("pressure_convection_coeffs_a.txt");
-     std::ofstream pressure_convection_coeffs_b("pressure_convection_coeffs_b.txt");
-     std::ofstream pressure_diffusion_coeffs_a("pressure_diffusion_coeffs_a.txt");
-     std::ofstream pressure_diffusion_coeffs_b("pressure_diffusion_coeffs_b.txt");
-     std::ofstream pressure_roc_coeffs_a("pressure_roc_coeffs_a.txt");
-     std::ofstream pressure_roc_coeffs_b("pressure_roc_coeffs_b.txt");
-     std::ofstream pressure_source_coeffs_b("pressure_source_coeffs_b.txt");
-     std::ofstream pressure_combined_coeffs_a("pressure_combined_coeffs_a.txt");
-     std::ofstream pressure_combined_coeffs_b("pressure_combined_coeffs_b.txt");
+     std::ofstream pressure_convection_coeffs_a(paths::coefficients + "pressure_convection_coeffs_a.txt");
+     std::ofstream pressure_convection_coeffs_b(paths::coefficients + "pressure_convection_coeffs_b.txt");
+     std::ofstream pressure_diffusion_coeffs_a(paths::coefficients + "pressure_diffusion_coeffs_a.txt");
+     std::ofstream pressure_diffusion_coeffs_b(paths::coefficients + "pressure_diffusion_coeffs_b.txt");
+     std::ofstream pressure_roc_coeffs_a(paths::coefficients + "pressure_roc_coeffs_a.txt");
+     std::ofstream pressure_roc_coeffs_b(paths::coefficients + "pressure_roc_coeffs_b.txt");
+     std::ofstream pressure_source_coeffs_b(paths::coefficients + "pressure_source_coeffs_b.txt");
+     std::ofstream pressure_combined_coeffs_a(paths::coefficients + "pressure_combined_coeffs_a.txt");
+     std::ofstream pressure_combined_coeffs_b(paths::coefficients + "pressure_combined_coeffs_b.txt");
     
      for(int i = 0; i<total_cells; i++)
      {
@@ -1343,10 +1345,10 @@ Scalar_field PV_coupling::retrieve_pressure_field()
 // Setting Initial Phase Faraction Fields (Like setfields from 'interFoam')
 void PV_coupling::set_alpha_scalar_initial_fields(std::vector<Cell> &list_of_cells, double &rho_1, double &rho_2, double &nu_1, double &nu_2, double &mu_1, double &mu_2, double &x_max, double &y_max)
 {
-    std::ofstream plot_initial_alpha("initial_alpha.txt");
-    std::ofstream plot_initial_nu("initial_nu.txt");
-    std::ofstream plot_initial_rho("initial_rho.txt");
-    std::ofstream plot_initial_mu("initial_mu.txt");
+    std::ofstream plot_initial_alpha(paths::fields + "initial_alpha.txt");
+    std::ofstream plot_initial_nu(paths::fields + "initial_nu.txt");
+    std::ofstream plot_initial_rho(paths::fields + "initial_rho.txt");
+    std::ofstream plot_initial_mu(paths::fields + "initial_mu.txt");
 
     for(int i=0; i<list_of_cells.size(); i++)
     {
@@ -1639,13 +1641,13 @@ void PV_coupling::alpha_update_rho_nu(std::vector<Cell> &list_of_cells, double &
 // // Phase Fraction Continuity - Matrix coefficients
 void PV_coupling::alpha_output_scalar_matrix_coefficients_to_file(double total_cells)
 {
-     std::ofstream alpha_convection_coeffs_a("alpha_convection_coeffs_a.txt");
-     std::ofstream alpha_convection_coeffs_b("alpha_convection_coeffs_b.txt");
-     std::ofstream alpha_roc_coeffs_a("alpha_roc_coeffs_a.txt");
-     std::ofstream alpha_roc_coeffs_b("alpha_roc_coeffs_b.txt");
-     std::ofstream alpha_source_coeffs_b("alpha_source_coeffs_b.txt");
-     std::ofstream alpha_combined_coeffs_a("alpha_combined_coeffs_a.txt");
-     std::ofstream alpha_combined_coeffs_b("alpha_combined_coeffs_b.txt");
+     std::ofstream alpha_convection_coeffs_a(paths::coefficients + "alpha_convection_coeffs_a.txt");
+     std::ofstream alpha_convection_coeffs_b(paths::coefficients + "alpha_convection_coeffs_b.txt");
+     std::ofstream alpha_roc_coeffs_a(paths::coefficients + "alpha_roc_coeffs_a.txt");
+     std::ofstream alpha_roc_coeffs_b(paths::coefficients + "alpha_roc_coeffs_b.txt");
+     std::ofstream alpha_source_coeffs_b(paths::coefficients + "alpha_source_coeffs_b.txt");
+     std::ofstream alpha_combined_coeffs_a(paths::coefficients + "alpha_combined_coeffs_a.txt");
+     std::ofstream alpha_combined_coeffs_b(paths::coefficients + "alpha_combined_coeffs_b.txt");
     
      for(int i = 0; i<total_cells; i++)
      {
@@ -1691,13 +1693,13 @@ void PV_coupling::alpha_output_scalar_matrix_coefficients_to_file(double total_c
 //Courant number display
 void PV_coupling::display_courant_number_details(std::vector<Cell>&list_of_cells, std::ofstream &file_courant_minmax, std::ofstream &file_courant_x_minmax,std::ofstream &file_courant_y_minmax)
 {
-    std::ofstream file_courant("courant.txt");
-    std::ofstream file_courant_x("courant_x.txt");
-    std::ofstream file_courant_y("courant_y.txt");
+    std::ofstream file_courant(paths::residuals + "courant.txt");
+    std::ofstream file_courant_x(paths::residuals + "courant_x.txt");
+    std::ofstream file_courant_y(paths::residuals + "courant_y.txt");
 
-    // std::ofstream file_courant_minmax("courant_minmax.txt");
-    // std::ofstream file_courant_x_minmax("courant_x_minmax.txt");
-    // std::ofstream file_courant_y_minmax("courant_y_minmax.txt");
+    // std::ofstream file_courant_minmax(paths::residuals + "courant_minmax.txt");
+    // std::ofstream file_courant_x_minmax(paths::residuals + "courant_x_minmax.txt");
+    // std::ofstream file_courant_y_minmax(paths::residuals + "courant_y_minmax.txt");
 
 
   double delta_dist = 0.0025, delta_time = 0.0001;
@@ -1768,285 +1770,38 @@ void PV_coupling::display_courant_number_details(std::vector<Cell>&list_of_cells
   //  file_courant_y_minmax.close();
 }
 
-
-
 // Function to output velocity, phase fraction and pressure to data files at regular pre-set intervals
 void PV_coupling::alpha_and_velocity_output_vector_field_to_file(std::vector<double> x_distance, std::vector<double> y_distance, int iteration_no, int output_interval)
 {
-     if((iteration_no % output_interval) == 0)
-    { 
-      std::string str_num_vx = std::to_string(iteration_no) + "_vx.txt";
-      std::string str_num_vy = std::to_string(iteration_no) + "_vy.txt";
-      std::string str_num_v_mag = std::to_string(iteration_no) + "_v_mag.txt";
-      std::string str_num_alpha = std::to_string(iteration_no) + "_alpha.txt";
-      std::string str_num_vec_plot = std::to_string(iteration_no) + "_vec_plot.txt";
-      std::string str_num_vx_horizontal = std::to_string(iteration_no) + "_vx_horizontal.txt";
-      std::string str_num_vx_vertical = std::to_string(iteration_no) + "_vx_vertical.txt";
-      std::string str_num_vy_horizontal = std::to_string(iteration_no) + "_vy_horizontal.txt";
-      std::string str_num_vy_vertical = std::to_string(iteration_no) + "_vy_vertical.txt";
-
-      std::string str_num_v_mag_left = std::to_string(iteration_no) + "v_mag_left.txt";
-      std::string str_num_v_mag_right = std::to_string(iteration_no) + "v_mag_right.txt";
-      std::string str_num_v_mag_bottom = std::to_string(iteration_no) + "v_mag_bottom.txt";
-      std::string str_num_v_mag_horizontal = std::to_string(iteration_no) + "v_mag_horizontal.txt";
-      std::string str_num_v_mag_vertical = std::to_string(iteration_no) + "v_mag_vertical.txt";
-
-      std::string str_num_pressure = std::to_string(iteration_no) + "pressure.txt";
-      std::string str_num_pressure_vertical = std::to_string(iteration_no) + "pressure_vertical.txt";
-      std::string str_num_pressure_horizontal = std::to_string(iteration_no) + "pressure_horizontal.txt";
-      std::string str_num_pressure_left = std::to_string(iteration_no) + "pressure_left.txt";
-      std::string str_num_pressure_right = std::to_string(iteration_no) + "pressure_right.txt";
-      std::string str_num_pressure_bottom = std::to_string(iteration_no) + "pressure_bottom.txt";
-
-      std::string str_num_alpha_vertical = std::to_string(iteration_no) + "alpha_vertical.txt";
-      std::string str_num_alpha_horizontal = std::to_string(iteration_no) + "alpha_horizontal.txt";
-      std::string str_num_alpha_left = std::to_string(iteration_no) + "alpha_left.txt";
-      std::string str_num_alpha_right = std::to_string(iteration_no)+ "alpha_right.txt";
-      std::string str_num_alpha_bottom = std::to_string(iteration_no) + "alpha_bottom.txt";
-
-        std::ofstream vector_field_profiles_x(str_num_vx);
-        for(int i=0; i<y_distance.size(); i++)
-         {
-              for(int j=0; j<x_distance.size(); j++)
-              {  
-                vector_field_profiles_x<<x_distance[j]<<"\t"<<y_distance[i]<<"\t"<<velocity.vector_field_values_x(j + i*x_distance.size())<<std::endl;
-              }
-         }
-
-        std::ofstream vector_field_profiles_y(str_num_vy);
-        for(int i=0; i<y_distance.size(); i++)
-         {
-              for(int j=0; j<x_distance.size(); j++)
-              {
-                vector_field_profiles_y<<x_distance[j]<<"\t"<<y_distance[i]<<"\t"<<velocity.vector_field_values_y(j + i*x_distance.size())<<std::endl;
-              }
-         }
-
-        std::ofstream vector_field_profiles_xy(str_num_v_mag);
-        for(int i=0; i<y_distance.size(); i++)
-         {
-              for(int j=0; j<x_distance.size(); j++)
-              {
-                 double vx = velocity.vector_field_values_x(j + i*x_distance.size());
-                 double vy = velocity.vector_field_values_y(j + i*x_distance.size());
-                 double v_mag = sqrt(vx*vx +  vy*vy);
-
-                vector_field_profiles_xy<<x_distance[j]<<"\t"<<y_distance[i]<<"\t"<<v_mag<<std::endl;
-              }
-         }
-
-        std::ofstream pressure_profiles(str_num_pressure); 
-        for(int i=0; i<y_distance.size(); i++)
-         {
-              for(int j=0; j<x_distance.size(); j++)
-              {  
-                pressure_profiles<<x_distance[j]<<"\t"<<y_distance[i]<<"\t"<<pressure.scalar_field_values(j + i*x_distance.size())<<std::endl;
-              }
-         }
-
-        std::ofstream alpha_profiles(str_num_alpha);
-        for(int i=0; i<y_distance.size(); i++)
-         {
-              for(int j=0; j<x_distance.size(); j++)
-              {  
-                alpha_profiles<<x_distance[j]<<"\t"<<y_distance[i]<<"\t"<<alpha.scalar_field_values(j + i*x_distance.size())<<std::endl;
-              }
-         }
-
-        std::ofstream vector_plots(str_num_vec_plot);
-        for(int i=0; i<y_distance.size(); i++)
-         {
-              for(int j=0; j<x_distance.size(); j++)
-              {
-                 double vx = velocity.vector_field_values_x(j + i*x_distance.size());
-                 double vy = velocity.vector_field_values_y(j + i*x_distance.size());
-                 double v_mag = sqrt(vx*vx +  vy*vy);
-
-                vector_plots<<x_distance[j]<<"\t"<<y_distance[i]<<"\t"<<pressure.scalar_field_values(j + i*x_distance.size())<<"\t"<<vx/v_mag<<"\t"<<vy/v_mag<<std::endl;
-              }
-         }
-
-         std::ofstream vx_horizontal(str_num_vx_horizontal);
-         std::ofstream vy_horizontal(str_num_vy_horizontal);
-         std::ofstream velocity_mag_horizontal(str_num_v_mag_horizontal);
-
-        for(int j=0; j<x_distance.size(); j++)
-         {
-            // double vx_left = velocity.vector_field_values_x(((y_distance.size()/2) - 1.0)*x_distance.size() + j);
-            // double vx_right = velocity.vector_field_values_x((y_distance.size()/2)*x_distance.size() + j); 
-            // double vx_mid = (vx_left + vx_right)/2.0;
-
-            // double vy_left = velocity.vector_field_values_y(((y_distance.size()/2) - 1.0)*x_distance.size() + j);
-            // double vy_right = velocity.vector_field_values_y((y_distance.size()/2)*x_distance.size() + j); 
-            // double vy_mid = (vy_left + vy_right)/2.0;
-
-            // double v_mag_horz = sqrt(vx_mid*vx_mid + vy_mid*vy_mid);
-
-            // vx_horizontal<<x_distance[j]<<"\t"<<vx_mid<<std::endl;
-            // vy_horizontal<<x_distance[j]<<"\t"<<vy_mid<<std::endl;
-            // velocity_mag_horizontal<<x_distance[j]<<"\t"<<v_mag_horz<<std::endl;
-         }
-
-        std::ofstream alpha_horizontal(str_num_alpha_horizontal);
-        for(int j=0; j<x_distance.size(); j++)
-         {
-            // double alpha_left = alpha.scalar_field_values(((y_distance.size()/2) - 1.0)*x_distance.size() + j);
-            // double alpha_right = alpha.scalar_field_values((y_distance.size()/2)*x_distance.size() + j); 
-            // double alpha_mid = (alpha_left + alpha_right)/2.0;
-
-            // alpha_horizontal<<x_distance[j]<<"\t"<<alpha_mid<<std::endl;
-         }
-
-        std::ofstream  pressure_horizontal(str_num_pressure_horizontal);
-        // for(int j=0; j<x_distance.size(); j++)
-        //  {
-        //     double  pressure_left =  pressure.scalar_field_values(((y_distance.size()/2) - 1.0)*x_distance.size() + j);
-        //     double  pressure_right =  pressure.scalar_field_values((y_distance.size()/2)*x_distance.size() + j); 
-        //     double  pressure_mid = (pressure_left +  pressure_right)/2.0;
-
-        //     pressure_horizontal<<x_distance[j]<<"\t"<<pressure_mid<<std::endl;
-        //  }
- 
-         std::ofstream vx_vertical(str_num_vx_vertical);
-         std::ofstream vy_vertical(str_num_vy_vertical);
-         std::ofstream velocity_mag_vertical(str_num_v_mag_vertical);
-        // for(int j=0; j<y_distance.size(); j++)
-        //  {
-        //     double vx_left = velocity.vector_field_values_x(((x_distance.size()/2) - 1.0) + (y_distance.size() * j));
-        //     double vx_right = velocity.vector_field_values_x(((x_distance.size()/2)) + (y_distance.size() * j));
-        //     double vx_mid = (vx_left + vx_right)/2.0;
-
-        //     double vy_left = velocity.vector_field_values_y(((x_distance.size()/2) - 1.0) + (y_distance.size() * j));
-        //     double vy_right = velocity.vector_field_values_y(((x_distance.size()/2)) + (y_distance.size() * j));
-        //     double vy_mid = (vy_left + vy_right)/2.0;
-
-        //     double v_mag_vert = sqrt(vx_mid*vx_mid + vy_mid*vy_mid);
-
-        //     vx_vertical<<y_distance[j]<<"\t"<<vx_mid<<std::endl;
-        //     vy_vertical<<y_distance[j]<<"\t"<<vy_mid<<std::endl;
-        //     velocity_mag_vertical<<y_distance[j]<<"\t"<<v_mag_vert<<std::endl;
-        //  }
-
-        std::ofstream alpha_vertical(str_num_alpha_vertical);
-        for(int j=0; j<y_distance.size(); j++)
-         {
-          //  double alpha_left = alpha.scalar_field_values(((x_distance.size()/2) - 1.0) + (y_distance.size() * j));
-          //  double alpha_right = alpha.scalar_field_values(((x_distance.size()/2)) + (y_distance.size() * j));
-          //  double alpha_mid = (alpha_left + alpha_right)/2.0;
-
-            //alpha_vertical<<y_distance[j]<<"\t"<<alpha_mid<<std::endl;
-         }
-
-        std::ofstream pressure_vertical(str_num_pressure_vertical);
-        for(int j=0; j<y_distance.size(); j++)
-         {
-           // double  pressure_left =  pressure.scalar_field_values(((x_distance.size()/2) - 1.0) + (y_distance.size() * j));
-           // double  pressure_right =  pressure.scalar_field_values(((x_distance.size()/2))*y_distance.size() + j); 
-           // double  pressure_mid = (pressure_left +  pressure_right)/2.0;
-
-            //pressure_vertical<<y_distance[j]<<"\t"<< pressure_mid<<std::endl;
-         }
-
-        
-        std::ofstream velocity_mag_left(str_num_v_mag_left);
-        for(int j=0; j<y_distance.size(); j++)
-         {
-           // double v_x = velocity.vector_field_values_x(((x_distance.size()/5) + 3) + (x_distance.size()*j));
-          //  double v_y = velocity.vector_field_values_y(((x_distance.size()/5) + 3) + (x_distance.size()*j)); 
-           // double v_mid = sqrt(v_x*v_x + v_y*v_y);
-
-           // velocity_mag_left<<y_distance[j]<<"\t"<<v_mid<<std::endl;
-         }
-
-        std::ofstream alpha_left(str_num_alpha_left);
-        for(int j=0; j<y_distance.size(); j++)
-         {
-          //  double alpha_val = alpha.scalar_field_values(((x_distance.size()/5) + 3) + (x_distance.size()*j));
-          //  alpha_left<<y_distance[j]<<"\t"<<alpha_val<<std::endl;
-         }
-
-        std::ofstream pressure_left(str_num_pressure_left);
-        for(int j=0; j<y_distance.size(); j++)
-         {
-          //  double pressure_val = pressure.scalar_field_values(((x_distance.size()/5) + 3) + (x_distance.size()*j));
-            //pressure_left<<y_distance[j]<<"\t"<<pressure_val<<std::endl;
-         }
-
-
-        std::ofstream velocity_mag_right(str_num_v_mag_right);
-        for(int j=0; j<y_distance.size(); j++)
-         {
-           // double v_x = velocity.vector_field_values_x(((x_distance.size()*0.8) + 1) + (x_distance.size()*j));
-            //double v_y = velocity.vector_field_values_y(((x_distance.size()*0.8) + 1) + (x_distance.size()*j)); 
-            //double v_mid = sqrt(v_x*v_x + v_y*v_y);
-
-           // velocity_mag_right<<y_distance[j]<<"\t"<<v_mid<<std::endl;
-         }
-
-        std::ofstream alpha_right(str_num_alpha_right);
-        for(int j=0; j<y_distance.size(); j++)
-         {
-            //double alpha_val = alpha.scalar_field_values(((x_distance.size()*0.8) + 1) + (x_distance.size()*j));
-           // alpha_right<<y_distance[j]<<"\t"<<alpha_val<<std::endl;
-         }
-
-
-        std::ofstream pressure_right(str_num_pressure_right);
-        for(int j=0; j<y_distance.size(); j++)
-         {
-            //double pressure_val = pressure.scalar_field_values(((x_distance.size()*0.8) + 1) + (x_distance.size()*j));
-           // pressure_right<<y_distance[j]<<"\t"<<pressure_val<<std::endl;
-         }
-
-        std::ofstream velocity_mag_bottom(str_num_v_mag_bottom);
-        for(int j=0; j<x_distance.size(); j++)
-         {
-           //  double v_x = velocity.vector_field_values_x((((y_distance.size()*0.2) - 5)*x_distance.size()) + j);
-           //  double v_y = velocity.vector_field_values_y((((y_distance.size()/5) - 5)*x_distance.size()) + j);
-           //  double v_mid = sqrt(v_x*v_x + v_y*v_y);
-
-            // velocity_mag_bottom<<x_distance[j]<<"\t"<<v_mid<<std::endl;
-         }
-
-        std::ofstream alpha_bottom(str_num_alpha_bottom);
-        for(int j=0; j<x_distance.size(); j++)
-         {
-            // double alpha_val = alpha.scalar_field_values((((y_distance.size()/5) - 5)*x_distance.size()) + j);
-            // alpha_bottom<<x_distance[j]<<"\t"<<alpha_val<<std::endl;
-         }
-
-        std::ofstream pressure_bottom(str_num_pressure_bottom);
-        for(int j=0; j<x_distance.size(); j++)
-         {
-            // double pressure_val = pressure.scalar_field_values((((y_distance.size()/5) - 5)*x_distance.size()) + j);
-            // pressure_bottom<<x_distance[j]<<"\t"<<pressure_val<<std::endl;
-         }
-
-        vector_field_profiles_x.close();
-        vector_field_profiles_y.close();
-        vector_field_profiles_xy.close();
-        alpha_profiles.close();
-        vector_plots.close();
-        vx_horizontal.close();
-        vx_vertical.close();
-        vy_horizontal.close();
-        vy_vertical.close();
-         velocity_mag_left.close();
-         velocity_mag_right.close();
-         velocity_mag_bottom.close();
-         velocity_mag_horizontal.close();
-         velocity_mag_vertical.close();
-         pressure_profiles.close();
-         alpha_vertical.close();
-         alpha_horizontal.close();
-        alpha_left.close();
-         alpha_right.close();
-         alpha_bottom.close();
-         pressure_vertical.close();
-         pressure_horizontal.close();
-         pressure_left.close();
-         pressure_right.close();     
-         pressure_bottom.close();
+    if((iteration_no % output_interval) != 0)
+    {
+        return;
     }
-} 
 
+    std::string prefix = paths::fields + std::to_string(iteration_no);
+
+    std::ofstream vector_field_profiles_x (prefix + "_vx.txt");
+    std::ofstream vector_field_profiles_y (prefix + "_vy.txt");
+    std::ofstream vector_field_profiles_xy(prefix + "_v_mag.txt");
+    std::ofstream pressure_profiles        (prefix + "_pressure.txt");
+    std::ofstream alpha_profiles           (prefix + "_alpha.txt");
+    std::ofstream vector_plots             (prefix + "_vec_plot.txt");
+
+    for(int i=0; i<y_distance.size(); i++)
+    {
+        for(int j=0; j<x_distance.size(); j++)
+        {
+            int cell = j + i*x_distance.size();
+            double vx = velocity.vector_field_values_x(cell);
+            double vy = velocity.vector_field_values_y(cell);
+            double v_mag = sqrt(vx*vx + vy*vy);
+
+            vector_field_profiles_x <<x_distance[j]<<"\t"<<y_distance[i]<<"\t"<<vx<<std::endl;
+            vector_field_profiles_y <<x_distance[j]<<"\t"<<y_distance[i]<<"\t"<<vy<<std::endl;
+            vector_field_profiles_xy<<x_distance[j]<<"\t"<<y_distance[i]<<"\t"<<v_mag<<std::endl;
+            pressure_profiles       <<x_distance[j]<<"\t"<<y_distance[i]<<"\t"<<pressure.scalar_field_values(cell)<<std::endl;
+            alpha_profiles          <<x_distance[j]<<"\t"<<y_distance[i]<<"\t"<<alpha.scalar_field_values(cell)<<std::endl;
+            vector_plots            <<x_distance[j]<<"\t"<<y_distance[i]<<"\t"<<pressure.scalar_field_values(cell)<<"\t"<<vx/v_mag<<"\t"<<vy/v_mag<<std::endl;
+        }
+    }
+}
